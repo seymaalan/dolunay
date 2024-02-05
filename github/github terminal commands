@@ -20,3 +20,11 @@ git fetch
 # remote repodaki değişikleri local branch le mergeleme 
 git pull
 
+# localde farkli bir branch e gecme
+git checkout <branch_ismi>
+
+# localde yeni branch olusturup olusturulan branch e gecme
+git checkout -b <branch_ismi>
+
+# repo nun mevcut durumu
+git status
