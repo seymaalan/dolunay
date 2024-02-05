@@ -1,0 +1,22 @@
+# git deposu ile locali ilişkilendir
+git init
+
+# bir veya tüm dosyayı stage etmek 
+git add file_name
+git add .
+
+# stage lenen dosyaları commit e dönüştürme
+git commit -m "Commit açıklaması"
+
+# stage lenen dosyaları commit e dönüştürme
+git remote add origin https://github.com/username/repo_name
+
+# local deki commitleri repo ya gönderme
+git push
+
+# remote repo daki değişiklikleri local e indirme
+git fetch
+
+# remote repodaki değişikleri local branch le mergeleme 
+git pull
+
