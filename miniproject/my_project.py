@@ -29,12 +29,12 @@ for rt in risetimes:
     print(time)"""
 # Begining to TicketMaster
 #APIKey: Gkcd7sqQAXwAZPuGDyVCIFB4yD0hIwn9
+
 def fetch_events(City):
     r = requests.get("https://app.ticketmaster.com/discovery/v2/events.json?countryCode=TR&apikey=Gkcd7sqQAXwAZPuGDyVCIFB4yD0hIwn9")
     data = r.json()
     events = data.get('_embedded', {}).get('events', [])
-    result = {"events_in_city":[]}
-    t = []
+    result = []
     for event in events:
         a = (event.get('_embedded', {}).get('venues', []))[0]
         city = a.get('city').get('name')
@@ -42,14 +42,46 @@ def fetch_events(City):
             valid = dict({})
             #name
             event_name = event.get('name')
-            valid["name"] = event_name
+            valid["event_name"] = event_name
             #genre
             e = (event.get('classifications'))[0]
-            event_genre = e.get("genre").get("name")
+            event_genre = e.get("genre", {}).get("name")
             valid["genre"] = event_genre
-            t.append(valid)
-    result["events_in_city"] = t
-    print(result)
+            #segment
+            event_segment = e.get("segment").get("name")
+            valid["segment"] = event_segment
+            #address
+            k = event.get("_embedded").get("venues")
+            event_address = (k[0]).get("address", {}).get("line1", "No address")
+            valid["address"] = event_address
+            #city
+            valid["city"] = City
+            #localdate
+            event_localdate = event.get("dates").get("start").get("localDate")
+            valid["localdate"] = event_localdate
+            #localtime
+            event_localtime = event.get("dates").get("start").get("localTime")
+            valid["localtime"] = event_localtime
+            #URL
+            event_url = event.get("url")
+            valid["url"] = event_url
+            result.append(valid)
+    return result
+import csv
 
+def convert_to_csv(jsons, path):
+    with open(path, "w", encoding="utf-8-sig") as csvfile:
+        headers = ["event_name", "genre", "segment", "address", "city", "localdate", "localtime", "url"]
+        writer = csv.DictWriter(csvfile, fieldnames=headers)
+        writer.writeheader()
 
-fetch_events("İzmir")
+        for event in jsons:
+            writer.writerow(event)
+
+# Assuming fetch_events returns a list of dictionaries representing events
+json_data = fetch_events("İzmir")
+
+if json_data is not None:
+    convert_to_csv(json_data, "C:\\Users\\glsm\\Dolunay\\dolunay\\miniproject\\events.csv")
+else:
+    print("Error: fetch_events returned None")
