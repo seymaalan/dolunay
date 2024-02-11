@@ -29,6 +29,18 @@ for rt in risetimes:
     print(time)"""
 # Begining to TicketMaster
 #APIKey: Gkcd7sqQAXwAZPuGDyVCIFB4yD0hIwn9
+def order(lis):
+    s = set({})
+    result = []
+    for c in lis:
+        s.add(c)
+    a = s
+    for i in a:
+        result.append(i)
+    return result
+
+def are_dicts_equal(dict1, dict2):
+    return sorted(dict1.items()) == sorted(dict2.items())
 
 def fetch_events(City):
     r = requests.get("https://app.ticketmaster.com/discovery/v2/events.json?countryCode=TR&apikey=Gkcd7sqQAXwAZPuGDyVCIFB4yD0hIwn9")
@@ -79,7 +91,7 @@ def convert_to_csv(jsons, path):
             writer.writerow(event)
 
 # Assuming fetch_events returns a list of dictionaries representing events
-json_data = fetch_events("İzmir")
+json_data = fetch_events("Mardin")
 
 if json_data is not None:
     convert_to_csv(json_data, "C:\\Users\\glsm\\Dolunay\\dolunay\\miniproject\\events.csv")
