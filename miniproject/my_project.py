@@ -73,7 +73,7 @@ def fetch_events(City):
             valid["localdate"] = event_localdate
             #localtime
             event_localtime = event.get("dates").get("start").get("localTime")
-            valid["localtime"] = event_localtime
+            valid["local_time"] = event_localtime
             #URL
             event_url = event.get("url")
             valid["url"] = event_url
@@ -83,7 +83,7 @@ import csv
 
 def convert_to_csv(jsons, path):
     with open(path, "w", encoding="utf-8-sig") as csvfile:
-        headers = ["event_name", "genre", "segment", "address", "city", "localdate", "localtime", "url"]
+        headers = ["event_name", "genre", "segment", "address", "city", "localdate", "local_time", "url"]
         writer = csv.DictWriter(csvfile, fieldnames=headers)
         writer.writeheader()
 
@@ -91,9 +91,9 @@ def convert_to_csv(jsons, path):
             writer.writerow(event)
 
 # Assuming fetch_events returns a list of dictionaries representing events
-json_data = fetch_events("Mardin")
+json_data = fetch_events("Ankara")
 
 if json_data is not None:
-    convert_to_csv(json_data, "C:\\Users\\glsm\\Dolunay\\dolunay\\miniproject\\events.csv")
+    convert_to_csv(json_data, "C:\\Users\\gulsu\\Dolunay\\dolunay\\miniproject\\events.csv")
 else:
     print("Error: fetch_events returned None")
