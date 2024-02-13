@@ -1,8 +1,6 @@
 import requests
 import json
 
-
-
 url = "https://app.ticketmaster.com/discovery/v2/events.json?size=20&countryCode=TR&dmaID=613&apikey=g6pKevuLGDIhUR5eudnnOiWtvpW6SeDf"
 
 def fetch_events():
