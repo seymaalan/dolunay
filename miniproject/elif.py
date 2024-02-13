@@ -63,8 +63,7 @@ def fetch_events():
 
              x += 1
              info.append(list_of_events)
-         print(info)     
-         
+            
      else:
           print("ERROR: " + response.status_code)   
 
@@ -76,7 +75,6 @@ def convert_to_csv(info):
    headers = ["event_name","genre","segment","address","city","local_date","local_time","url"]
    info2 = [headers] + info
    for row in info2:
-      print(row)
       writer.writerow(row)
    file.close   
    return     
