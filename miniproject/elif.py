@@ -10,7 +10,7 @@ def fetch_events():
          "locale": "*",
          "city": city
     }
-     global info
+     
      info = []
      response = requests.get(url, parameters)
 
