@@ -1,6 +1,6 @@
 import requests
 import json
-from jprint import jprint
+
 
 
 url = "https://app.ticketmaster.com/discovery/v2/events.json?size=20&countryCode=TR&dmaID=613&apikey=g6pKevuLGDIhUR5eudnnOiWtvpW6SeDf"
@@ -11,7 +11,8 @@ def fetch_events():
          "locale": "*",
          "city": city
     }
-     
+     global info
+     info = []
      response = requests.get(url, parameters)
 
      if response.status_code==200:
@@ -22,59 +23,80 @@ def fetch_events():
              data = response.json()
              try:
               event_name = data["_embedded"]["events"][x]["name"]
-              print("Name: " +event_name)
+              
              except KeyError:
-                 print("Name: None") 
+                 event_name = "None" 
 
              try:
               genre_name = data["_embedded"]["events"][x]["classifications"][0]["genre"]["name"]
-              print("Genre: " +genre_name)
+            
              except KeyError:
-                print("Genre: None") 
+                genre_name = "None" 
 
              try:
               segment_name = data["_embedded"]["events"][x]["classifications"][0]["segment"]["name"]
-              print("Segment: " +segment_name)
+              
              except KeyError:
-                print("Segment: None") 
+                segment_name = "None" 
 
              try:
               address = data["_embedded"]["events"][x]["_embedded"]["venues"][0]["address"]["line1"]
-              print("Address: " +address)
+              
              except KeyError:
-                print("Address: None")
+                address = "None"
 
              try:
               city_name = data["_embedded"]["events"][x]["_embedded"]["venues"][0]["city"]["name"]
-              print("City: " +city_name)
+              
              except KeyError:
-                print("City: None")
+                city_name = "None"
 
              try:
               localdate = data["_embedded"]["events"][x]["dates"]["start"]["localDate"]
-              print("Local Date: " +localdate)
+             
              except KeyError:
-                print("Local Date: None")
+                localdate = "None"
 
              try:
               localtime = data["_embedded"]["events"][x]["dates"]["start"]["localTime"]
-              print("Local Time: " +localtime)
+              
              except KeyError:
-                print("Local Time: None")
+                localtime = "None"
 
              try:
               event_url = data["_embedded"]["events"][x]["url"]
-              print("URL: " +event_url)
+              
              except KeyError:
-                print("URL: None")
-             
+                event_url = "None"
+
+             list_of_events = [event_name,genre_name,segment_name,address,city_name,localdate,localtime,event_url]  
+         
+
              x += 1
-
-
+             info.append(list_of_events)
+         print(info)     
+         
      else:
           print("ERROR: " + response.status_code)   
-          
-            
 
-def convert_to_csv():
+     return info      
+          
+import csv
+
+def convert_to_csv(info):
+   file = open("events.csv", "w")
+   writer = csv.writer(file)
+   #info = fetch_events()
+   headers = ["Event Name","Genre","Segment","Address","City","Local Date","Local Time","URL"]
+   info2 = [headers] + info
+   for row in info2:
+      print(row)
+      writer.writerow(row)
+   file.close   
+   return     
+      
+info = fetch_events()
+convert_to_csv(info)
+
+
    
