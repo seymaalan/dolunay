@@ -82,7 +82,7 @@ def fetch_events(City):
 import csv
 
 def convert_to_csv(jsons, path):
-    with open(path, "w", encoding="utf-8-sig") as csvfile:
+    with open(path, "w", newline='', encoding="utf-8-sig") as csvfile:
         headers = ["event_name", "genre", "segment", "address", "city", "localdate", "local_time", "url"]
         writer = csv.DictWriter(csvfile, fieldnames=headers)
         writer.writeheader()
@@ -91,7 +91,7 @@ def convert_to_csv(jsons, path):
             writer.writerow(event)
 
 # Assuming fetch_events returns a list of dictionaries representing events
-json_data = fetch_events("Ankara")
+json_data = fetch_events("İstanbul")
 
 if json_data is not None:
     convert_to_csv(json_data, "C:\\Users\\gulsu\\Dolunay\\dolunay\\miniproject\\events.csv")
