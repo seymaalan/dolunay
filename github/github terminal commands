@@ -1,3 +1,6 @@
+Important Note: git push yaparken username ve password soruldugunda password yerine github settings/developer settings menusunden olusturacaginiz personal access tokeni kullanmaniz gerekmektedir.
+
+
 # git deposu ile locali ilişkilendir
 git init
 
