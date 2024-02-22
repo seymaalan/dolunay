@@ -77,26 +77,18 @@ import csv
 def convert_to_csv(json_data, csv_path):
     try:
         with open(csv_path, mode='w', newline='', encoding='utf-8') as csv_file:
-            writer = csv.DictWriter(csv_file, fieldnames=headers)
-
-            
-            headers = ['event_name', 'genre', 'segment', 'address', 'city', 'localdate', 'localtime', 'url']
-            writer.writeheader()
-
-            
+            writer = csv.writer(csv_file)
+            writer.writerow(['event_name', 'genre', 'segment', 'address', 'city', 'localdate', 'localtime', 'url'])
             for event in json_data:
-                
-                if not isinstance(event, dict):
-                    continue
-
                 writer.writerow(event)
-
+                
         print(f"CSV dosyası başarıyla oluşturuldu: {csv_path}")
 
     except Exception as e:
         print("CSV'ye dönüştürme hatası:", e)
 
 
+events = fetch_events("Ankara") 
+convert_to_csv(events, "c:\\Users\\ASUS\\Desktop\\dolunay\\miniproject\\events.csv")
 
-#events = fetch_events("Istanbul") 
 
