@@ -57,7 +57,8 @@ def delete_test_post(id:int, db:Session = Depends(get_db)):
 
 
 @router.put('/posts/{id}', response_model=schemas.CreatePost)
-def update_test_post(update_post:schemas.PostBase, id:int, db:Session = Depends(get_db)):
+@router.put('/{id}', response_model=schemas.CreatePost)
+def update_test_post(id:int, update_post:schemas.PostBase, db:Session = Depends(get_db)):
 
     updated_post =  db.query(models.Events).filter(models.Events.id == id)
 
@@ -65,6 +66,5 @@ def update_test_post(update_post:schemas.PostBase, id:int, db:Session = Depends(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The id:{id} does not exist")
     updated_post.update(update_post.dict(), synchronize_session=False)
     db.commit()
-
 
     return  updated_post.first()
