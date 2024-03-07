@@ -1,9 +1,13 @@
-from typing import Union
-from fastapi import FastAPI
+from typing import Union, List, Annotated
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
-from database import Post, Base, engine
+from database import Base, engine, SessionLocal
 from datetime import date, datetime
 import models
+from sqlalchemy.orm import Session
+
+app = FastAPI()
+models.Base.metadata.create_all(bind=engine)
 
 class PostRequest(BaseModel):
     event_name: str
@@ -14,10 +18,14 @@ class PostRequest(BaseModel):
     local_time: datetime
     url: str
 
-models.Base.metadata.create_all(bind=engine)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-app = FastAPI()
-
+db_dependency = Annotated[Session, Depends(get_db)]
 
 @app.get("/")
 async def root():
