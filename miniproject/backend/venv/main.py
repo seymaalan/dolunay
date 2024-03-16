@@ -63,7 +63,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         )
     return user
 
-async def get_current_active_user(
+async def is_admin(
     current_user: Annotated[User, Depends(get_current_user)]
 ):
     if current_user.disabled:
@@ -84,11 +84,11 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
 
 @app.get("/users/me")
 async def read_users_me(
-    current_user: Annotated[User, Depends(get_current_active_user)]
+    current_user: Annotated[User, Depends(is_admin)]
 ):
     return current_user
 
-app.include_router(posts.router, dependencies=[Depends(get_current_active_user)])
+app.include_router(posts.router, dependencies=[Depends(is_admin)])
 
 @app.get("/upcoming_events", response_model=List[schemas.CreatePost])
 def get_upcoming_events(db: Session = Depends(get_db)):
