@@ -55,8 +55,6 @@ def delete_test_post(id:int, db:Session = Depends(get_db)):
     db.commit()
 
 
-
-@router.put('/posts/{id}', response_model=schemas.CreatePost)
 @router.put('/{id}', response_model=schemas.CreatePost)
 def update_test_post(id:int, update_post:schemas.PostBase, db:Session = Depends(get_db)):
 
