@@ -18,8 +18,6 @@ router = APIRouter(
 def get_all_posts(db: Session = Depends(get_db)):
 
     post = db.query(models.Events).all()
-
-
     return  post
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=List[schemas.CreatePost])
@@ -29,7 +27,7 @@ def post_a_post(post_post:schemas.CreatePost, db:Session = Depends(get_db)):
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
-
+    print("The new event has been successfully added")
     return [new_post]
 
 
@@ -47,10 +45,10 @@ def delete_post(event_name:str, db:Session = Depends(get_db)):
 
     deleted_post = db.query(models.Events).filter(models.Events.event_name == event_name)
 
-
     if deleted_post.first() is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"The event '{event_name}' you requested for does not exist")
+    else: print("The event '{event_name}' has been deleted")
     deleted_post.delete(synchronize_session=False)
     db.commit()
 
