@@ -42,15 +42,15 @@ def get_test_one_post(id:int ,db:Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"The id: {id} you requested for does not exist")
     return idv_post
 
-@router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
-def delete_test_post(id:int, db:Session = Depends(get_db)):
+@router.delete('/{event_name}', status_code=status.HTTP_204_NO_CONTENT)
+def delete_test_post(event_name:str, db:Session = Depends(get_db)):
 
-    deleted_post = db.query(models.Events).filter(models.Events.id == id)
+    deleted_post = db.query(models.Events).filter(models.Events.event_name == event_name)
 
 
     if deleted_post.first() is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail=f"The id: {id} you requested for does not exist")
+                            detail=f"The event: {event_name} you requested for does not exist")
     deleted_post.delete(synchronize_session=False)
     db.commit()
 
