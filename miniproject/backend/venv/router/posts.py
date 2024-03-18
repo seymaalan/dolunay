@@ -50,7 +50,7 @@ def delete_post(event_name:str, db:Session = Depends(get_db)):
 
     if deleted_post.first() is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail=f"{event_name} you requested for does not exist")
+                            detail=f"The event '{event_name}' you requested for does not exist")
     deleted_post.delete(synchronize_session=False)
     db.commit()
 
