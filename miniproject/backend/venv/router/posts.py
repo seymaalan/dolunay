@@ -15,7 +15,7 @@ router = APIRouter(
 )
 
 @router.get('/', response_model=List[schemas.CreatePost])
-def test_posts(db: Session = Depends(get_db)):
+def get_all_posts(db: Session = Depends(get_db)):
 
     post = db.query(models.Events).all()
 
@@ -23,7 +23,7 @@ def test_posts(db: Session = Depends(get_db)):
     return  post
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=List[schemas.CreatePost])
-def test_posts_sent(post_post:schemas.CreatePost, db:Session = Depends(get_db)):
+def post_a_post(post_post:schemas.CreatePost, db:Session = Depends(get_db)):
 
     new_post = models.Events(**post_post.dict())
     db.add(new_post)
@@ -34,7 +34,7 @@ def test_posts_sent(post_post:schemas.CreatePost, db:Session = Depends(get_db)):
 
 
 @router.get('/{id}', response_model=schemas.CreatePost, status_code=status.HTTP_200_OK)
-def get_test_one_post(id:int ,db:Session = Depends(get_db)):
+def get_one_post(id:int ,db:Session = Depends(get_db)):
 
     idv_post = db.query(models.Events).filter(models.Events.id == id).first()
 
@@ -43,20 +43,20 @@ def get_test_one_post(id:int ,db:Session = Depends(get_db)):
     return idv_post
 
 @router.delete('/{event_name}', status_code=status.HTTP_204_NO_CONTENT)
-def delete_test_post(event_name:str, db:Session = Depends(get_db)):
+def delete_post(event_name:str, db:Session = Depends(get_db)):
 
     deleted_post = db.query(models.Events).filter(models.Events.event_name == event_name)
 
 
     if deleted_post.first() is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail=f"The event: {event_name} you requested for does not exist")
+                            detail=f"{event_name} you requested for does not exist")
     deleted_post.delete(synchronize_session=False)
     db.commit()
 
 
 @router.put('/{id}', response_model=schemas.CreatePost)
-def update_test_post(id:int, update_post:schemas.PostBase, db:Session = Depends(get_db)):
+def update_post(id:int, update_post:schemas.PostBase, db:Session = Depends(get_db)):
 
     updated_post =  db.query(models.Events).filter(models.Events.id == id)
 
